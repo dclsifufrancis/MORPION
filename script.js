@@ -1,31 +1,77 @@
-// for (var i=0; i<3; i++)
-//    for(var j=0; j<3; j++)
-//       grille[i][j] = 0;  
+const gameArea = document.getElementById("game-area"); // le seul élément du DOM dont on a besoin c'est l'élément parent de nos cases -> on récupérera l'enfant au clique.
+
+var cellsStatus = [ ["vide", "vide", "vide"],
+["vide", "vide", "vide"],
+["vide", "vide", "vide"] ];
+
+gameArea.addEventListener("click", function(event) {
+    var clickedCellElmt;
+    var clickedCellName;
+    var clickedCellCoordX;
+    var clickedCellCoordY;
+
+    clickedCellElmt = document.getElementById(event.target.id); //enregistre l'élément enfant du DOM qui a été cliquée.
+    clickedCellName = event.target.id; //renvoie l'id de la cellule cliquée sous forme de string
+    clickedCellCoordX = parseInt(clickedCellName[1]); // récupère le 2eme caractère dans l'ID
+    clickedCellCoordY = parseInt(clickedCellName[4]); // récupère le 5eme caractère dans l'ID
+    console.log("X : " + clickedCellCoordX + ", Y : " + clickedCellCoordY);
+    console.log("clickedCell : " + clickedCellName);
+
+    console.log(cellsStatus);
 
 
-var case1 = document.getElementById("1");
-var case2 = document.getElementById("2");
-var case3 = document.getElementById("3");
-var case4 = document.getElementById("4");
-var case5 = document.getElementById("5");
-var case6 = document.getElementById("6");
-var case7 = document.getElementById("7");
-var case8 = document.getElementById("8");
-var case9 = document.getElementById("9");
+    if (cellsStatus[clickedCellCoordX-1][clickedCellCoordY-1] == "vide"){
+        if (joueurActif == 1) {
+                clickedCellElmt.style.backgroundColor = "yellow";
+                changementJoueur();
+                cellsStatus[clickedCellCoordX-1][clickedCellCoordY-1] = "jaune";
+                victoire();
+            } else {
+                clickedCellElmt.style.backgroundColor = "red";
+                changementJoueur();
+                cellsStatus[clickedCellCoordX-1][clickedCellCoordY-1] = "rouge";
+                victoire();
+            }
+        
+    }else {
+        console.log("Choisir une autre case !")
+    }
 
-case1.addEventListener("click", couleur1);
-case2.addEventListener("click", couleur2);
-case3.addEventListener("click", couleur3);
-case4.addEventListener("click", couleur4);
-case5.addEventListener("click", couleur5);
-case6.addEventListener("click", couleur6);
-case7.addEventListener("click", couleur7);
-case8.addEventListener("click", couleur8);
-case9.addEventListener("click", couleur9);
 
-var joueur = true;
-var joueurActif = 1;
-        // fonction pour chgt de joueur 
+    function victoire() {
+        if ((cellsStatus[0][0]== "jaune" && cellsStatus[1][0]== "jaune" &&  cellsStatus[2][0] == "jaune") ||
+        (cellsStatus[0][1]== "jaune" && cellsStatus[1][1]== "jaune" &&  cellsStatus[2][1] == "jaune") || 
+        (cellsStatus[0][2]== "jaune" && cellsStatus[1][2]== "jaune" &&  cellsStatus[2][2] == "jaune") || 
+        (cellsStatus[0][0]== "jaune" && cellsStatus[0][1]== "jaune" &&  cellsStatus[0][2] == "jaune") || 
+        (cellsStatus[1][0]== "jaune" && cellsStatus[1][1]== "jaune" &&  cellsStatus[1][2] == "jaune") || 
+        (cellsStatus[2][0]== "jaune" && cellsStatus[2][1]== "jaune" &&  cellsStatus[2][2] == "jaune") || 
+        (cellsStatus[0][0]== "jaune" && cellsStatus[1][1]== "jaune" &&  cellsStatus[2][2] == "jaune") || 
+        (cellsStatus[2][0]== "jaune" && cellsStatus[1][1]== "jaune" &&  cellsStatus[0][2] == "jaune")) {
+            console.log("Joueur Jaune win !!!");
+        } else if ((cellsStatus[0][0]== "rouge" && cellsStatus [1][0]== "rouge" &&  cellsStatus [2][0] == "rouge") || 
+        (cellsStatus[0][1]== "rouge" && cellsStatus [1][1]== "rouge" &&  cellsStatus [2][1]== "rouge") || 
+        (cellsStatus[0][2]== "rouge" && cellsStatus [1][2]== "rouge" &&  cellsStatus [2][2]== "rouge") || 
+        (cellsStatus[0][0]== "rouge" && cellsStatus [0][1]== "rouge" &&  cellsStatus [0][2]== "rouge") || 
+        (cellsStatus[1][0]== "rouge" && cellsStatus [1][1]== "rouge" &&  cellsStatus [1][2]== "rouge") || 
+        (cellsStatus[2][0]== "rouge" && cellsStatus [2][1]== "rouge" &&  cellsStatus [2][2]== "rouge") || 
+        (cellsStatus[0][0]== "rouge" && cellsStatus [1][1]== "rouge" &&  cellsStatus [2][2]== "rouge") || 
+        (cellsStatus[2][0]== "rouge" && cellsStatus [1][1]== "rouge" &&  cellsStatus [0][2] == "rouge")) {
+            console.log("Joueur Rouge win !!!");
+        } else if ((cellsStatus[0][0] != "vide" && cellsStatus[1][0] != "vide" &&  cellsStatus[2][0] != "vide") &&
+        (cellsStatus[0][1] != "vide" && cellsStatus[1][1] != "vide" &&  cellsStatus[2][1] != "vide") &&
+        (cellsStatus[0][2] != "vide" && cellsStatus[1][2] != "vide" &&  cellsStatus[2][2] != "vide") && 
+        (cellsStatus[0][0] != "vide" && cellsStatus[0][1] != "vide" &&  cellsStatus[0][2] != "vide") && 
+        (cellsStatus[1][0] != "vide" && cellsStatus[1][1] != "vide" &&  cellsStatus[1][2] != "vide") && 
+        (cellsStatus[2][0] != "vide" && cellsStatus[2][1] != "vide" &&  cellsStatus[2][2] != "vide") && 
+        (cellsStatus[0][0] != "vide" && cellsStatus[1][1] != "vide" &&  cellsStatus[2][2] != "vide") && 
+        (cellsStatus[2][0] != "vide" && cellsStatus[1][1] != "vide" &&  cellsStatus[0][2] != "vide")) {
+            console.log("Egalité !!!");
+    }}
+    });
+
+
+var joueur = true ;
+var joueurActif = 0;
 function changementJoueur() {
     if (joueur == true) {
         joueurActif = 1;
@@ -36,90 +82,20 @@ function changementJoueur() {
     }
 };
 
-changementJoueur()
-function couleur1() {
-    if (joueurActif == 1) {
-        case1.style.backgroundColor = "yellow";
-        changementJoueur();
-    }else {
-        case1.style.backgroundColor = "red";
-        changementJoueur();
-    } 
+function reset() {
+    for (var i=0; i<3; i++)
+        for(var j=0; j<3; j++)
+            cellsStatus[i][j] = "vide"; 
+            console.log(cellsStatus);
+            document.getElementById("x1-y1").style.backgroundColor = "";
+            document.getElementById("x1-y2").style.backgroundColor = "";  
+            document.getElementById("x1-y3").style.backgroundColor = "";  
+            document.getElementById("x2-y1").style.backgroundColor = "";  
+            document.getElementById("x2-y2").style.backgroundColor = "";  
+            document.getElementById("x2-y3").style.backgroundColor = "";  
+            document.getElementById("x3-y1").style.backgroundColor = "";  
+            document.getElementById("x3-y2").style.backgroundColor = "";  
+            document.getElementById("x3-y3").style.backgroundColor = "";  
 };
 
-function couleur2() {
-    if (joueurActif == 1) {
-        case2.style.backgroundColor = "yellow";
-        changementJoueur();
-    }else {
-        case2.style.backgroundColor = "red";
-        changementJoueur();
-    } 
-};
-
-function couleur3() {
-    if (joueurActif == 1) {
-        case3.style.backgroundColor = "yellow";
-        changementJoueur();
-    }else {
-        case3.style.backgroundColor = "red";
-        changementJoueur();
-    } 
-};
-
-function couleur4() {
-    if (joueurActif == 1) {
-        case4.style.backgroundColor = "yellow";
-        changementJoueur();
-    }else {
-        case4.style.backgroundColor = "red";
-        changementJoueur();
-    } 
-};
-
-function couleur5() {
-    if (joueurActif == 1) {
-        case5.style.backgroundColor = "yellow";
-        changementJoueur();
-    }else {
-        case5.style.backgroundColor = "red";
-        changementJoueur();
-    } 
-};
-
-function couleur6() {
-    if (joueurActif == 1) {
-        case6.style.backgroundColor = "yellow";
-        changementJoueur();
-    }else {
-        case6.style.backgroundColor = "red";
-        changementJoueur();
-    } 
-};
-function couleur7() {
-    if (joueurActif == 1) {
-        case7.style.backgroundColor = "yellow";
-        changementJoueur();
-    }else {
-        case7.style.backgroundColor = "red";
-        changementJoueur();
-    } 
-};
-function couleur8() {
-    if (joueurActif == 1) {
-        case8.style.backgroundColor = "yellow";
-        changementJoueur();
-    }else {
-        case8.style.backgroundColor = "red";
-        changementJoueur();
-    } 
-};
-function couleur9() {
-    if (joueurActif == 1) {
-        case9.style.backgroundColor = "yellow";
-        changementJoueur();
-    }else {
-        case9.style.backgroundColor = "red";
-        changementJoueur();
-    } 
-};
+document.getElementById("reset").addEventListener("click", reset);
